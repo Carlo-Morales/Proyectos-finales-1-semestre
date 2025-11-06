@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
 	cin>>columnas;
 	for(int i=0;i<filas;i++){
 		for(int j=0;j<columnas;j++){
-		cout<<"-1";//dibuja cada celda	
+		cout<<" -1";//dibuja cada celda	
 		}
 		cout<<endl;//salto de linea por fila
 	}
