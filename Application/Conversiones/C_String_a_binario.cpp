@@ -3,10 +3,12 @@
 #include <vector>
 
 int string_a_binario (string url, vector<int>&ascii){
+    ascii.resize(url.size());
     
     for (int i=0; i<url.size(); i++){
         char c = url[i];
         int a = c;
-        return ascii[i] = a;
+        ascii[i] = a; //vector con la conversión de cada caracter a ascii
     }
+    return ascii.size(); //return provisional
 }
