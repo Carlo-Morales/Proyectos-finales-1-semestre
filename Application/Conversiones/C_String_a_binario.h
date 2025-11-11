@@ -4,17 +4,21 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <bitset>
 using namespace std;
 
-int string_a_binario (string url, vector<int>&ascii){
+int string_a_binario (string url, vector<int>&ascii, vector<bitset<8>>&binario){
     ascii.resize(url.size());
+    binario.resize(ascii.size());
     
-    for (int i=0; i<url.size(); i++){
-        char c = url[i];
-        int a = c;
-        ascii[i] = a;
+        // Conversión a ASCII
+    for (int i = 0; i < url.size(); i++){
+        ascii[i] = (int)url[i];
+        //Conversión a binario
+        binario[i] = bitset<8>(ascii[i]); //Almacenamiento de los binarios en un bitset dentro del vector
     }
-    return ascii.size();
+    
+    return binario.size(); //return del binario
 }
 
 #endif
