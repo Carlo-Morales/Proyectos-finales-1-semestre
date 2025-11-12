@@ -1,130 +1,138 @@
 #include <iostream>
 #include <vector>
 
-// Definiciones
-const int TAMANO_QR = 25;
-enum Modulo { BLANCO = 0, NEGRO = 1 };
 
-// La matriz global o pasada por referencia
-Modulo matriz_qr[TAMANO_QR][TAMANO_QR]; 
+const int TAMANO_QR = 27;
+const int BLANCO = 0;
+const int NEGRO = 1;
+const int VACIO = -1;
+using std::cout;
 
-// Función para inicializar toda la matriz
-void inicializarMatriz() {
-    for (int i = 0; i < TAMANO_QR; ++i) {
-        for (int j = 0; j < TAMANO_QR; ++j) {
+int matriz_qr[TAMANO_QR][TAMANO_QR]; 
+int i, j;
+
+
+void inicializarMatriz(){
+    for ( i = 0; i < TAMANO_QR; i++) {
+        for ( j = 0; j < TAMANO_QR; j++) {
+            matriz_qr[i][j] = VACIO; 
+        }
+    }
+}
+
+void dibujarBordeExterno(){
+    int BORDE_ANCHO = 1;
+    for (i = 0; i < BORDE_ANCHO; i++){
+        for (j = 0; j < TAMANO_QR; j++){
+            matriz_qr[i][j] = BLANCO;
+        }
+    }
+    for (i = TAMANO_QR - BORDE_ANCHO ; i < TAMANO_QR; i++){
+        for (j = 0; j < TAMANO_QR; j++){
+            matriz_qr[i][j] = BLANCO;
+        }
+    }
+    for (j = 0; j < BORDE_ANCHO; j++){
+        for (i = 0; i < TAMANO_QR; i++){
+            matriz_qr[i][j] = BLANCO; 
+        }
+    }
+        for (j = TAMANO_QR - BORDE_ANCHO ; j < TAMANO_QR; j++){
+        for (i = 0; i < TAMANO_QR; i++){
             matriz_qr[i][j] = BLANCO; 
         }
     }
 }
-void dibujarAlignmentPattern() {
-    int fila_inicio = 16;
-    int col_inicio = 16;
-    
-    // El patrón 5x5: N B N B N (donde N=Negro, B=Blanco)
-    for (int i = 0; i < 5; ++i) {
-        for (int j = 0; j < 5; ++j) {
-            int fila = fila_inicio + i;
-            int col = col_inicio + j;
-
-            // Regla: Borde (0, 4) es N, Interior (1, 3) es B, Centro (2, 2) es N
-            if (i == 0 || i == 4 || j == 0 || j == 4 || (i == 2 && j == 2)) {
-                matriz_qr[fila][col] = NEGRO;
+void dibujarFinderPattern(int fila_inicio, int columna_inicio) {
+    for (int i = 0; i < 7; ++i) { 
+        for (int j = 0; j < 7; ++j) { 
+            if (i == 0 || i == 6 || j == 0 || j == 6 || (i > 1 && i < 5 && j > 1 && j < 5)) 
+            {
+                matriz_qr[fila_inicio + i][columna_inicio + j] = NEGRO; 
             } else {
-                matriz_qr[fila][col] = BLANCO;
+                matriz_qr[fila_inicio + i][columna_inicio + j] = BLANCO; 
             }
         }
     }
 }
-void dibujarFinderPattern(int fila_inicio, int col_inicio) {
-    for (int i = 0; i < 7; ++i) {
-        for (int j = 0; j < 7; ++j) {
-            // Coordenadas relativas (dentro del 7x7)
-            int fila = fila_inicio + i;
-            int col = col_inicio + j;
-
-            // ZONAS DE SEPARACIÓN BLANCA (Borde de 1 módulo)
-            // Se asume BLANCO por defecto en inicialización, pero se sobreescribe
-            // con NEGRO donde corresponde (i, j fuera del rango [1, 5])
-
-            // Estructura: NEGRO (0,6), BLANCO (1,5), NEGRO (2,3,4)
-            if (i == 0 || i == 6 || j == 0 || j == 6 || 
-                (i > 1 && i < 5 && j > 1 && j < 5)) {
-                matriz_qr[fila][col] = NEGRO;
+void dibujarFinderPattern_2(int fila_inicio, int columna_inicio){
+    for (int i=fila_inicio; i < 9; i++){
+            matriz_qr[fila_inicio + i][columna_inicio] = BLANCO;
+    }
+        for (int j=fila_inicio; j < 9; j++){
+            matriz_qr[columna_inicio][fila_inicio + j] = BLANCO;
+    }
+}
+void dibujarFinderPattern_3(int fila_inicio, int columna_inicio){
+    for (int j=columna_inicio; j <= TAMANO_QR - 1; j++){
+            matriz_qr[fila_inicio][j] = BLANCO;
+    }
+}
+void dibujarFinderPattern_4(int fila_inicio, int columna_inicio){
+    for (int i=fila_inicio; i <= TAMANO_QR - 1; i++){
+            matriz_qr[i][columna_inicio] = BLANCO;
+    }
+}
+void PatronDeTemporizador(){ 
+    const int INDICE_FIJO = 6;       
+    for (int j = 9; j <= 19; ++j) {
+            if (j % 2 == 1) {
+                matriz_qr[INDICE_FIJO][j] = NEGRO;
             } else {
-                matriz_qr[fila][col] = BLANCO;
+                matriz_qr[INDICE_FIJO][j] = BLANCO;
+            }
+    }
+    for (int i = 9; i <= 19; ++i) {
+            if (i % 2 == 1) {
+                matriz_qr[i][INDICE_FIJO] = NEGRO;
+            } else {
+                matriz_qr[i][INDICE_FIJO] = BLANCO;
+            }
+    }
+}
+void PatronDeAlineacion(){
+    for (int j = 16; j <= 20;  j++){
+        for (int i = 16; i <= 20; i++){
+            if (i == 16 || i == 20 || j == 16 || j == 20 || (i == 18 && j == 18)) 
+            {
+                matriz_qr[i][j] = NEGRO; 
+            } else {
+                matriz_qr[i][j] = BLANCO; 
             }
         }
+        }
     }
-    // NOTA: Los separadores de 1 módulo son simplemente las filas/columnas 7 y 17
-    // que, al ser inicializadas a BLANCO, ya están correctas.
+void ElementoNegro() {
+    matriz_qr[19][9] = NEGRO; 
 }
-
-// CÓDIGO PRINCIPAL: Llamar 3 veces
-// dibujarFinderPattern(0, 0);   
-// dibujarFinderPattern(0, 18);  
-// dibujarFinderPattern(18, 0);
-void dibujarTimingPatterns() {
-    // Patrón Horizontal: Fila 6, desde Columna 7 hasta 17
-    for (int j = 7; j <= 17; ++j) {
-        // La secuencia es 1 0 1 0... (Negro, Blanco, Negro...)
-        // j=7 (impar) -> NEGRO, j=8 (par) -> BLANCO.
-        matriz_qr[6][j] = (j % 2 == 1) ? NEGRO : BLANCO;
-    }
-
-    // Patrón Vertical: Columna 6, desde Fila 7 hasta 17
-    for (int i = 7; i <= 17; ++i) {
-        // La secuencia es 1 0 1 0... 
-        // i=7 (impar) -> NEGRO, i=8 (par) -> BLANCO.
-        matriz_qr[i][6] = (i % 2 == 1) ? NEGRO : BLANCO;
-    }
-}
-void colocarDarkModule() {
-    matriz_qr[18][8] = NEGRO;
-}
-void imprimirQR(const Modulo matriz_qr[TAMANO_QR][TAMANO_QR]) {
-    // La fila y columna 0 son el margen silencioso (Quiet Zone).
-    // Para QR V2, el tamaño es 25x25, pero el estándar requiere un margen silencioso 
-    // de al menos 4 módulos. Por simplicidad, imprimiremos el 25x25 rodeado de espacios.
-    
-    // Imprimir el margen superior (opcional, pero recomendado)
-    for (int k = 0; k < TAMANO_QR + 2; ++k) {
-        std::cout << " ";
-    }
-    std::cout << "\n";
-
+void imprimirQR() {
     for (int i = 0; i < TAMANO_QR; ++i) {
-        std::cout << " "; // Margen izquierdo
         for (int j = 0; j < TAMANO_QR; ++j) {
             if (matriz_qr[i][j] == NEGRO) {
-                // Usamos el bloque sólido para el contraste
-                std::cout << "██"; 
+                cout << "  ";
+            } else if (matriz_qr[i][j] == BLANCO) {
+                cout << "██";
             } else {
-                // Usamos el espacio para el módulo blanco
-                std::cout << "  "; 
+                cout << "--"; 
             }
         }
-        std::cout << " \n"; // Margen derecho y nueva línea
+        cout << "\n";
     }
-
-    // Imprimir el margen inferior (opcional)
-    for (int k = 0; k < TAMANO_QR + 2; ++k) {
-        std::cout << " ";
-    }
-    std::cout << "\n";
 }
-int main(){
-    // ... Dentro de tu función main() o una función constructora ...
-
-inicializarMatriz();
-dibujarFinderPattern(0, 0);   
-dibujarFinderPattern(0, 18);  
-dibujarFinderPattern(18, 0);  
-dibujarTimingPatterns();
-dibujarAlignmentPattern();
-colocarDarkModule();
-
-// A partir de aquí: Insertar Información de Formato y el Data Stream (Zigzag)
-imprimirQR(matriz_qr);
-
+int main (){
+    inicializarMatriz();
+    dibujarBordeExterno();
+    dibujarFinderPattern(1, 1); 
+    dibujarFinderPattern(1, 19);  
+    dibujarFinderPattern(19, 1); 
+    dibujarFinderPattern_2(0,8);
+    dibujarFinderPattern_2(0,18);
+    dibujarFinderPattern_2(18,0);
+    dibujarFinderPattern_3(8,19);
+    dibujarFinderPattern_4(19,8);
+    PatronDeTemporizador();
+    PatronDeAlineacion();
+    ElementoNegro();
+    imprimirQR();
     return 0;
 }
