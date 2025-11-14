@@ -75,7 +75,7 @@ void dibujarFinderPattern_4(int FILA_INICIO, int COLUMNA_INCIO){
     }
 }
 void PatronDeTemporizador(){ 
-    const int INDICE_FIJO = 6;       
+    const int INDICE_FIJO = 7;       
     for (int j = 9; j <= 19; ++j) {
             if (j % 2 == 1) {
                 matriz_qr[INDICE_FIJO][j] = NEGRO;
@@ -107,6 +107,7 @@ void ElementoNegro() {
     matriz_qr[19][9] = NEGRO; 
 }
 void imprimirQR() {
+    cout << "\n";
     for (int i = 0; i < TAMANO_QR; ++i) {
         for (int j = 0; j < TAMANO_QR; ++j) {
             if (matriz_qr[i][j] == NEGRO) {
